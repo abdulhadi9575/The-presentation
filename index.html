@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Presentation - Abdul Hadi</title>
+  <style>
+    /* ====== Basic Layout ====== */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0f2027;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    canvas#particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    #slides {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .slide {
+      width: 90%;
+      max-width: 800px;
+      display: none;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+    .slide.active {
+      display: block;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: #00e6e6;
+      animation: slideDown 0.8s ease-out;
+    }
+    p {
+      font-size: 1.3rem;
+      line-height: 1.7;
+      animation: fadeIn 1s ease-in-out;
+    }
+    img {
+      max-width: 220px;
+      margin: 15px auto;
+      border-radius: 12px;
+      animation: popIn 0.8s ease-in-out;
+      box-shadow: 0 0 15px rgba(0,230,230,0.6);
+    }
+
+    /* ====== Buttons ====== */
+    .controls {
+      margin: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+    button {
+      background: #121212;
+      border: 2px solid #00e6e6;
+      padding: 12px 30px;
+      font-size: 1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      color: #00e6e6;
+      font-weight: bold;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 8px #00e6e6, 0 0 15px #00e6e6 inset;
+    }
+    button:hover {
+      background: #00e6e6;
+      color: #121212;
+      box-shadow: 0 0 20px #00e6e6, 0 0 40px #00e6e6;
+      transform: scale(1.1);
+    }
+
+    /* ====== Music Button ====== */
+    #music-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: #121212;
+      border: 2px solid #00e6e6;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      color: #00e6e6;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    #music-btn:hover {
+      background: #00e6e6;
+      color: #121212;
+      box-shadow: 0 0 15px #00e6e6;
+    }
+
+    /* ====== Progress Bar ====== */
+    #progress-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 6px;
+      background: #00e6e6;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* ====== Watermark ====== */
+    #watermark {
+      position: absolute;
+      bottom: 10px;
+      left: 20px;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.6);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    #watermark img {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+    }
+
+    /* ====== Splash Screen ====== */
+    #splash {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: #0f2027;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: #00e6e6;
+      z-index: 10;
+      animation: fadeSplash 3s forwards;
+      font-size: 2rem;
+      text-align: center;
+    }
+
+    @keyframes fadeSplash {
+      0% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; visibility: hidden; }
+    }
+
+    /* ====== Animations ====== */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideDown {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes popIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Particles Background -->
+  <canvas id="particles"></canvas>
+
+  <!-- Splash Screen -->
+  <div id="splash">
+    <h1>Abdul Hadi</h1>
+    <p>English Presentation</p>
+  </div>
+
+  <!-- Background Music -->
+  <audio id="bg-music" autoplay loop>
+    <source src="https://cdn.pixabay.com/download/audio/2023/02/28/audio_37b2e3b80c.mp3?filename=soft-piano-music-140353.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Music Button -->
+  <button id="music-btn" onclick="toggleMusic()">Mute Music</button>
+
+  <!-- Slides -->
+  <div id="slides">
+    <div class="slide active">
+      <h1>Introduction</h1>
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Student">
+      <p>Good morning respected teachers and my dear friends.<br>
+      My name is <b>Abdul Hadi</b>. I study in class 9 and I am a student of <b>The Educators</b>.<br>
+      Today I am going to talk about the English language.</p>
+    </div>
+    <div class="slide">
+      <h1>What is English?</h1>
+      <img src="https://cdn-icons-png.flaticon.com/512/197/197374.png" alt="Globe">
+      <p>English is a language spoken by <b>billions</b> of people in the world.<br>
+      We see English in books, games, movies, and even signs on the road.</p>
+    </div>
+    <div class="slide">
+      <h1>History of English</h1>
+      <img src="https://cdn-icons-png.flaticon.com/512/3446/3446418.png" alt="History">
+      <p>English started many years ago in a country called England.<br>
+      Later, it spread to countries like America, Canada, and Australia.<br>
+      Now, English is used almost everywhere in the world.</p>
+    </div>
+    <div class="slide">
+      <h1>Fun Facts</h1>
+      <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" alt="Fun">
+      <p>- English is the third most spoken language in the world.<br>
+      - The shortest sentence is “I am.”<br>
+      - The longest word has 189,819 letters!</p>
+    </div>
+    <div class="slide">
+      <h1>Why is English Important?</h1>
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135810.png" alt="Importance">
+      <p>English helps us in school, jobs, and travel.<br>
+      Most websites and apps use English.<br>
+      If we learn English, we can talk to people from many countries.</p>
+    </div>
+    <div class="slide">
+      <h1>How to Learn English?</h1>
+      <img src="https://cdn-icons-png.flaticon.com/512/3062/3062634.png" alt="Learning">
+      <p>Practice a little every day.<br>
+      Read books, watch movies, and try speaking with friends.<br>
+      Don’t be scared of mistakes — that’s how we learn.</p>
+    </div>
+    <div class="slide">
+      <h1>Conclusion</h1>
+      <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="Thank you">
+      <p>English is very important for our life.<br>
+      It helps us study, work, and connect with the whole world.<br>
+      Let us all learn and speak English with confidence.<br><br><b>Thank you!</b></p>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button onclick="prevSlide()">Back</button>
+    <button onclick="nextSlide()">Next</button>
+    <button onclick="toggleAuto()">Auto</button>
+  </div>
+
+  <!-- Progress Bar -->
+  <div id="progress-bar"></div>
+
+  <!-- Watermark -->
+  <div id="watermark">
+    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Logo">
+    Abdul Hadi – The Educators
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    let autoMode = false;
+    let autoInterval;
+    const music = document.getElementById('bg-music');
+    const musicBtn = document.getElementById('music-btn');
+    const progressBar = document.getElementById('progress-bar');
+
+    function showSlide(index) {
+      slides.forEach(slide => slide.classList.remove('active'));
+      slides[index].classList.add('active');
+      progressBar.style.width = ((index + 1) / slides.length) * 100 + '%';
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % slides.length;
+      showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      showSlide(currentSlide);
+    }
+
+    function toggleAuto() {
+      if (autoMode) {
+        clearInterval(autoInterval);
+        autoMode = false;
+      } else {
+        autoInterval = setInterval(nextSlide, 5000);
+        autoMode = true;
+      }
+    }
+
+    function toggleMusic() {
+      if (music.paused) {
+        music.play();
+        musicBtn.textContent = "Mute Music";
+      } else {
+        music.pause();
+        musicBtn.textContent = "Play Music";
+      }
+    }
+
+    // Keyboard Controls
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+      if (e.key === ' ') toggleAuto();
+    });
+
+    // Particles background
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let particlesArray;
+    const numberOfParticles = 80;
+
+    function initParticles() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      particlesArray = [];
+      for (let i = 0; i < numberOfParticles; i++) {
+        particlesArray.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 2 + 1,
+          dx: (Math.random() - 0.5) * 1,
+          dy: (Math.random() - 0.5) * 1
+        });
+      }
+    }
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#00e6e6';
+      particlesArray.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+        p.x += p.dx;
+        p.y += p.dy;
+        if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+      });
+      requestAnimationFrame(drawParticles);
+    }
+
+    window.addEventListener('resize', initParticles);
+    initParticles();
+    drawParticles();
+  </script>
+
+</body>
+</html>
