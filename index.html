@@ -32,31 +32,34 @@
       padding: 20px;
     }
 
+    /* ====== Slide Transition ====== */
     .slide {
       width: 90%;
       max-width: 800px;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 0.5s ease, transform 0.5s ease;
       display: none;
-      animation: fadeIn 0.8s ease-in-out;
     }
     .slide.active {
       display: block;
+      opacity: 1;
+      transform: scale(1);
     }
+
     h1 {
       font-size: 2.5rem;
       margin-bottom: 10px;
       color: #00e6e6;
-      animation: slideDown 0.8s ease-out;
     }
     p {
       font-size: 1.3rem;
       line-height: 1.7;
-      animation: fadeIn 1s ease-in-out;
     }
     img {
       max-width: 220px;
       margin: 15px auto;
       border-radius: 12px;
-      animation: popIn 0.8s ease-in-out;
       box-shadow: 0 0 15px rgba(0,230,230,0.6);
     }
 
@@ -87,7 +90,7 @@
       transform: scale(1.1);
     }
 
-    /* ====== Music Button ====== */
+    /* ====== Music Button with Glow ====== */
     #music-btn {
       position: absolute;
       top: 15px;
@@ -106,15 +109,23 @@
       color: #121212;
       box-shadow: 0 0 15px #00e6e6;
     }
+    #music-btn.playing {
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 10px #00e6e6; }
+      50% { box-shadow: 0 0 25px #00ffff; }
+      100% { box-shadow: 0 0 10px #00e6e6; }
+    }
 
-    /* ====== Progress Bar ====== */
+    /* ====== Progress Bar Gradient ====== */
     #progress-bar {
       position: absolute;
       bottom: 0;
       left: 0;
       height: 6px;
-      background: #00e6e6;
       width: 0%;
+      background: linear-gradient(90deg, #00e6e6, #0066ff);
       transition: width 0.3s ease;
     }
 
@@ -150,25 +161,36 @@
       font-size: 2rem;
       text-align: center;
     }
-
+    #splash h1 {
+      font-size: 3rem;
+      animation: glowZoom 2s ease-in-out infinite alternate;
+    }
+    @keyframes glowZoom {
+      0% { transform: scale(1); text-shadow: 0 0 10px #00e6e6, 0 0 20px #00ffff; }
+      100% { transform: scale(1.1); text-shadow: 0 0 20px #00e6e6, 0 0 40px #00ffff; }
+    }
     @keyframes fadeSplash {
       0% { opacity: 1; }
       80% { opacity: 1; }
       100% { opacity: 0; visibility: hidden; }
     }
 
-    /* ====== Animations ====== */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    /* ====== Auto Mode Indicator ====== */
+    #auto-indicator {
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      font-size: 1rem;
+      color: #00e6e6;
+      display: none;
     }
-    @keyframes slideDown {
-      from { transform: translateY(-20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    @keyframes popIn {
-      from { transform: scale(0.8); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+
+    /* ====== Mobile Responsiveness ====== */
+    @media (max-width: 600px) {
+      h1 { font-size: 1.8rem; }
+      p { font-size: 1rem; }
+      img { max-width: 150px; }
+      #music-btn { font-size: 0.8rem; padding: 6px 15px; }
     }
   </style>
 </head>
@@ -182,6 +204,9 @@
     <h1>Abdul Hadi</h1>
     <p>English Presentation</p>
   </div>
+
+  <!-- Auto Mode Indicator -->
+  <div id="auto-indicator">Auto Mode ON</div>
 
   <!-- Background Music -->
   <audio id="bg-music" autoplay loop>
@@ -267,6 +292,7 @@
     const music = document.getElementById('bg-music');
     const musicBtn = document.getElementById('music-btn');
     const progressBar = document.getElementById('progress-bar');
+    const autoIndicator = document.getElementById('auto-indicator');
 
     function showSlide(index) {
       slides.forEach(slide => slide.classList.remove('active'));
@@ -288,9 +314,11 @@
       if (autoMode) {
         clearInterval(autoInterval);
         autoMode = false;
+        autoIndicator.style.display = "none";
       } else {
         autoInterval = setInterval(nextSlide, 5000);
         autoMode = true;
+        autoIndicator.style.display = "block";
       }
     }
 
@@ -298,9 +326,11 @@
       if (music.paused) {
         music.play();
         musicBtn.textContent = "Mute Music";
+        musicBtn.classList.add("playing");
       } else {
         music.pause();
         musicBtn.textContent = "Play Music";
+        musicBtn.classList.remove("playing");
       }
     }
 
